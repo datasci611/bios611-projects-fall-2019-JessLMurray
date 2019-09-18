@@ -1,7 +1,7 @@
 ---
 title: "README"
 author: "JessLMurray"
-date: "9/9/2019"
+date: "9/18/2019"
 output: html_document
 ---
 
@@ -9,22 +9,14 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Urban Ministries of Durham Data Analysis
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This project is focused on analysis of services provided by the non-profit organization Urban Ministries of Durham (UMD) to to the homeless population of Durham county, North Carolina. Data was collected from ~1991 to the present, and includes information on goods such as food, clothing, bus tickets, diapers, school supplies, hygiene kits, and financial support provided to clients. Individual clients and families are uniquely identified by a file number and the date of service. Information provided by UMD on variables in the data set are given below:
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r message=FALSE}
+library("tidyverse")
+suppressWarnings(library(tidyverse))
+metadata <- data.frame("Client File Number" = "family identifier (individual or family", "Client File Merge" = "separate files were created for one family and merged later", "Bus Tickets (Number of)" = "Service discontinued.", "Notes of Service" = "", "Food Provided for" = "Number of People in the family for which food was provided", "Food Pounds" = "", "Clothing Items" = "", "Diapers" = "", "School Kits" = "", "Hygiene Kits" = "", "Financial Support" = "Money provided to clients. Service discontinued.")
+metadata
 ```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+For more information on the services provided by UMD to the Durham county community, visit http://www.umdurham.org/. 
