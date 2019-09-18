@@ -15,9 +15,12 @@ This project is focused on analysis of services provided by the non-profit organ
 
 ```{r message=FALSE}
 library("tidyverse")
+library(knitr)
 suppressWarnings(library(tidyverse))
 metadata <- data.frame("Client File Number" = "family identifier (individual or family", "Client File Merge" = "separate files were created for one family and merged later", "Bus Tickets (Number of)" = "Service discontinued.", "Notes of Service" = "", "Food Provided for" = "Number of People in the family for which food was provided", "Food Pounds" = "", "Clothing Items" = "", "Diapers" = "", "School Kits" = "", "Hygiene Kits" = "", "Financial Support" = "Money provided to clients. Service discontinued.")
+kable(metadata, digits=2)
 ```
+
 ## Urban Ministries of Durham Data Analysis
 
 This analysis will focus on answering the following questions: 
