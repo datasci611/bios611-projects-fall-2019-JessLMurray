@@ -23,10 +23,7 @@ View(umdclean)
   #find the number of unique client file numbers 
 library(dplyr)
 
-colnames(umdclean)[colnames(umdclean)=="client number"] <- "client n"
-umdclean
-
-umdunique <- unique(umdclean$`client n`)
+umdunique <- unique(umdclean$`Client File Number`)
 length(umdunique)
 
 #how many clients/families used services each year? 
@@ -43,16 +40,18 @@ transform(umddate, year = as.numeric(year))
 
 #histogram
 umdyear <- umddate$year
-hist(umdyear)
+hist(umdyear, main="Frequency of Clients/Families Aided by UMD per Year", ylab="Year", col="light blue", breaks = 29)
 
 #which services are provided most frequently?
 colnames(umdclean)[colnames(umdclean)=="Type of Bill Paid"] <- "bill"
 umdbills <- umdclean$bill
+
+#remove missing values 
 umdbills2 <- na.omit(umdbills)
-colnames(umdbills2)[colnames(umdbills2)=="V1"] <- "bill"
-View(umdbills2)
 
-library(ggplot2)
+#convert to a vector
+umdbills2 <- as.vector(umdbills2)
+class(umdbills2)
+umdbills2
 
-ggplot(data.frame(umdbills2), aes(x="V1")) + 
-  geom_histogram(stat="count")
+barplot(table(umdbills2), main="Bills Paid by UMD", ylab = "Frequency", las=2)
