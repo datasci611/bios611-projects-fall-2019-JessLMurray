@@ -1,13 +1,9 @@
 ---
 title: "README"
 author: "JessLMurray"
-date: "9/18/2019"
+date: "9/25/2019"
 output: html_document
 ---
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
 ## Urban Ministries of Durham Data Set
 
@@ -35,7 +31,7 @@ This analysis will focus on answering the following questions:
 * For clients who received aid from UMD on more than one occassion, what is the average time interval between services?
 * Which services are provided most frequently?
 * Are seasonal trends present in the data (i.e. are certain services provided more frequently during specific times of the year?)
-* Are there any long-term trends in the quantity and type of services provided? 
+* Are there any long-term trends (i.e. from the beginning of data collection to the present) in the quantity and type of services provided? 
 
 Analyses will attempt to combine data provided by UMD with statistics from the U.S. Census Bureau (https://www.census.gov/quickfacts/fact/table/durhamcountynorthcarolina/HSG445217#HSG445217) and the Community Development Council of Durham (http://www.cdcd.org/). 
 
