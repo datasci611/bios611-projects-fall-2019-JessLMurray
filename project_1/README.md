@@ -1,10 +1,3 @@
----
-title: "README"
-author: "JessLMurray"
-date: "9/25/2019"
-output: html_document
----
-
 ## Urban Ministries of Durham Data Set
 
 This project is focused on analysis of services provided by the non-profit organization Urban Ministries of Durham (UMD) to the homeless population of Durham county, North Carolina. Data were collected from ~1991 to the present, and include information on goods such as food, clothing, bus tickets, diapers, school supplies, hygiene kits, and financial support provided to clients. Individual clients and families are uniquely identified by a file number and the date of service. Information provided by UMD on variables in the data set are given below:
