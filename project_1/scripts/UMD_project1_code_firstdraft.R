@@ -18,6 +18,8 @@ View(umdclean)
 #noticed there are some rows with dates in the future - removed those too
 umdclean <- umdclean %>% filter(Date <= "2019-09-15")
 View(umdclean)
+nrow(umdclean)
+#there were 65,498 instances of services provided!
 
 #How many clients/families use services provided by UMD? 
   #find the number of unique client file numbers 
@@ -25,6 +27,7 @@ library(dplyr)
 
 umdunique <- unique(umdclean$`Client File Number`)
 length(umdunique)
+#there were 11,231 clients served by UMD!
 
 #how many clients/families used services each year? 
   #separate date column so that year can be used
