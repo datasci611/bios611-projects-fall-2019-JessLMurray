@@ -2,8 +2,8 @@
 title: 'Project 1 Report: An Analysis of Services Provided by Urban Ministries of Durham'
 author: 'Jessica Murray'
 output: 
-  html_document: default
-  pdf_document: default
+   pdf_document: default
+   html_document: default
 ---
 
 
@@ -17,7 +17,7 @@ library(ggplot2)
 
 #load in the data
 #note - I cleaned up the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
-umd <- read_excel("C:/Users/jessi/Desktop/UMD project/UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
+umd <- read_excel("D:/bios611-homework-fall-2019-JessLMurray/bios611-projects-fall-2019-JessLMurray/project_1/data/UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
 ```
 
 ## Urban Ministries of Durham Data Analysis
@@ -48,7 +48,8 @@ transform(umdclean, year = as.numeric(year))
 ```{r message = FALSE, warning = FALSE}
 ggplot(umdclean, aes(x=year)) + 
   geom_histogram(color = "white") + 
-  labs(x = "Year", y = "Frequency of Services Provided", title = "Number of Times Service was Provided by UMD")
+  labs(x = "Year", y = "Frequency of Services Provided", 
+       title = "Number of Times Service was Provided by UMD")
 ```
 
 Based on this histogram, it looks like most services weren't provided or accounted for prior to around the year 2000. I will therefore focus further analysis on data from the past 20 years (1999 to 2019). 
@@ -103,7 +104,7 @@ counts
 It appears that the number of services provided tends to increase from 1999 until around 2013, and then decreases from around 2013 to the present. One might guess that the sharp uptick in services provided in 2008 may correlate to the U.S. recession that began in the same year. To test whether unemployment rates are related to the amount of aid given, we may conduct a correlation analysis that compares the unemployment rate to the number of clients/families aided by UMD each year. Unemployment data was obtained from the [Bureau of Labor Statistics](https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm). 
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
-bls_avg <- read_excel("C:/Users/jessi/Desktop/UMD project/BLS_unemployment_avg.xls")
+bls_avg <- read_excel("D:/bios611-homework-fall-2019-JessLMurray/bios611-projects-fall-2019-JessLMurray/project_1/data/BLS_unemployment_avg.xls")
 
 blscorr <- data.frame("Clients/Families Aided Per Year" = counts, "Unemployment Rate (Percent)" = bls_avg$`avg_unemployment`)
 blscorr
@@ -121,3 +122,12 @@ summary(model)
 ```
 
 Our summary statistics demonstrate that there is a significant positive correlation between the national unemployment rate and the number of clients/families who were helped by UMD (R^2^ = 0.6789, p-value = 8.0*10^-6^). 
+
+## Conclusions
+To conclude, we gained the following insights from anaysis of the data: 
+
+* Most clients and families were served in the last 20 years as opposed to earlier in UMD's history. This may be due to an improvement/change in recordkeeping over time, or due to an increase in UMD's profile due to special events and/or word-of-mouth advertising.
+
+* The the most common reasons for monetary donations from UMD were the following: electricity bills > rent > bus tickets.
+
+* The national unemployment rate provided by the Bureau of Labor Statistics is significantly positively correlated with the number of services provided by UMD from 1999-2019. 
