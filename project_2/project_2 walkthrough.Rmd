@@ -80,8 +80,6 @@ summary(model)
 Now that we have demonstrated a significant positive correlation between the national unemployment rate and the services provided by UMD (R^2^ = 0.6789, p-value = 8.0*10^-6^), we have the basis for a predictive tool that can estimate the number of clients/families that will visit UMD based on the economic climate. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
-library(shiny)
-
 #define UI
 ui <- fluidPage(
   
@@ -91,7 +89,7 @@ ui <- fluidPage(
   #sidebar layout with input and output definitions
   sidebarLayout(
     
-    #sidebar panel
+    #sidebar panel, input
     sidebarPanel(
       numericInput("Unemployment.Rate..Percent.", "Unemployment Rate (Percent)", value = 5, min = 0, max = NA, step = NA, width = NULL)
     ),
@@ -101,39 +99,39 @@ ui <- fluidPage(
       
       #output: scatter plot
       tabsetPanel(type = "tabs",
-
-tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
-tabPanel("Model Summary Stats", verbatimTextOutput("summary")), # Regression output
-tabPanel("Model Prediction", textOutput("clients")) # dependent variable (clients aided/yr) output
-         ),
-    
+                  tabPanel("Model Prediction", textOutput("clients")), # dependent variable (clients aided/yr) output
+                  tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
+                  tabPanel("Model Summary Stats", verbatimTextOutput("summary")) # Regression output
+                 
+      )
+      
     )
   )
 )
 
 #define server logic for making figure 
 server <- function(input, output) {
-
+  
+  # dependent variable (clients aided/yr) output
+  output$clients <- renderPrint({
+     paste('Predicted Clients/Families Aided per Year =', employ(input$Unemployment.Rate..Percent.))
+           })
+  
+  # Scatterplot output
+  output$blscorr <- renderPlot({
+    ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
+      geom_point() + 
+      geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
+      labs(x="Average Unemployment Rate (Percent)", y="Clients/Families Aided Per Year", 
+           title = "Clients/Families Aided per Year vs. National Unemployment")
+  }, height=400)
+  
   # Regression output
   output$summary <- renderPrint({
     fit <- lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
     summary(fit)
   })
   
-  # dependent variable (clients aided/yr) output
-  output$clients <- renderPrint({
-    fitted(fit)
-  })
-
-    # Scatterplot output
-  output$blscorr <- renderPlot({
-    ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
-     geom_point() + 
-     geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
-     labs(x="Average Unemployment Rate (Percent)", y="Clients/Families Aided Per Year", 
-       title = "Clients/Families Aided per Year vs. National Unemployment")
-  }, height=400)
-
 }
 
 shinyApp(ui = ui, server = server)
