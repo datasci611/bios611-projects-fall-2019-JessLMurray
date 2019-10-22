@@ -52,6 +52,12 @@ ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.
 model = lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
 summary(model)
 
+#function for correlation
+employ <- function(employ) {
+  clientnum = ((employ)*662.9) - 641.2
+  return(clientnum)
+}
+
 #define UI
 ui <- fluidPage(
   
@@ -61,7 +67,7 @@ ui <- fluidPage(
   #sidebar layout with input and output definitions
   sidebarLayout(
     
-    #sidebar panel
+    #sidebar panel, input
     sidebarPanel(
       numericInput("Unemployment.Rate..Percent.", "Unemployment Rate (Percent)", value = 5, min = 0, max = NA, step = NA, width = NULL)
     ),
@@ -71,10 +77,10 @@ ui <- fluidPage(
       
       #output: scatter plot
       tabsetPanel(type = "tabs",
-                  
+                  tabPanel("Model Prediction", textOutput("clients")), # dependent variable (clients aided/yr) output
                   tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
-                  tabPanel("Model Summary Stats", verbatimTextOutput("summary")), # Regression output
-                  tabPanel("Model Prediction", textOutput("clients")) # dependent variable (clients aided/yr) output
+                  tabPanel("Model Summary Stats", verbatimTextOutput("summary")) # Regression output
+                 
       )
       
     )
@@ -84,16 +90,10 @@ ui <- fluidPage(
 #define server logic for making figure 
 server <- function(input, output) {
   
-  # Regression output
-  output$summary <- renderPrint({
-    fit <- lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
-    summary(fit)
-  })
-  
   # dependent variable (clients aided/yr) output
   output$clients <- renderPrint({
-    fitted(fit)
-  })
+     paste('Predicted Clients/Families Aided per Year =', employ(input$Unemployment.Rate..Percent.))
+           })
   
   # Scatterplot output
   output$blscorr <- renderPlot({
@@ -104,9 +104,12 @@ server <- function(input, output) {
            title = "Clients/Families Aided per Year vs. National Unemployment")
   }, height=400)
   
+  # Regression output
+  output$summary <- renderPrint({
+    fit <- lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
+    summary(fit)
+  })
+  
 }
 
 shinyApp(ui = ui, server = server)
-
-```
-
