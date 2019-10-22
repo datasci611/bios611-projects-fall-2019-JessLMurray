@@ -75,7 +75,7 @@ ui <- fluidPage(
                   tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
                   tabPanel("Model Summary Stats", verbatimTextOutput("summary")), # Regression output
                   tabPanel("Model Prediction", textOutput("clients")) # dependent variable (clients aided/yr) output
-      ),
+      )
       
     )
   )
@@ -109,3 +109,4 @@ server <- function(input, output) {
 shinyApp(ui = ui, server = server)
 
 ```
+
