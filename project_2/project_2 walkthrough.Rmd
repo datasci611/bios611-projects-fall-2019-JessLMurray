@@ -64,7 +64,6 @@ counts
 #correlation between the unemployment rate and the number of clients/families aided per year 
 blscorr <- data.frame("Clients/Families Aided Per Year" = counts, 
                       "Unemployment Rate (Percent)" = bls_avg$`avg_unemployment`)
-blscorr
 ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
   geom_point() + 
   geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
@@ -105,7 +104,7 @@ ui <- fluidPage(
 
 tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
 tabPanel("Model Summary Stats", verbatimTextOutput("summary")), # Regression output
-tabPanel("Model Prediction", ) # dependent variable (clients aided/yr) output
+tabPanel("Model Prediction", textOutput("clients")) # dependent variable (clients aided/yr) output
          ),
     
     )
@@ -122,8 +121,8 @@ server <- function(input, output) {
   })
   
   # dependent variable (clients aided/yr) output
-  output$tbl = DT::renderDataTable({
-    DT::datatable(swiss, options = list(lengthChange = FALSE))
+  output$clients <- renderPrint({
+    fitted(fit)
   })
 
     # Scatterplot output
@@ -135,16 +134,6 @@ server <- function(input, output) {
        title = "Clients/Families Aided per Year vs. National Unemployment")
   }, height=400)
 
-  
-  # Histogram output var 1
-  output$distribution1 <- renderPlot({
-    hist(swiss[,input$outcome], main="", xlab=input$outcome)
-  }, height=300, width=300)
-
-  # Histogram output var 2
-  output$distribution2 <- renderPlot({
-    hist(swiss[,input$indepvar], main="", xlab=input$indepvar)
-  }, height=300, width=300)
 }
 
 shinyApp(ui = ui, server = server)
