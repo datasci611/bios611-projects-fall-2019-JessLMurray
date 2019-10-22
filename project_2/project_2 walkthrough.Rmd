@@ -1,0 +1,152 @@
+---
+title: "Project 2 Report (First Draft)"
+author: "JessLMurray"
+date: "10/21/2019"
+output: 
+   pdf_document: default
+   html_document: default
+---
+```{r warning=FALSE, include=FALSE}
+library(tidyverse)
+library(readxl) 
+library(dplyr)
+library(lubridate)
+library(readxl)  
+library(ggplot2)
+library(shiny)
+
+#set wd
+setwd("D:/bios611-projects-fall-2019-JessLMurray/project_2/data")
+getwd()
+
+#load in the data
+#note - I cleaned up the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
+umd <- read_excel("D:/bios611-projects-fall-2019-JessLMurray/project_2/data/UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
+```
+### Urban Ministries of Durham Data Analysis & Shiny Dashboard
+The goal of this project is to create a shiny app that will predict the number of instances service will be provided to UMD clients/families based on the national unemployment rate (data provided by the [Bureau of Labor Statistics](https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm)).
+
+## UMD Data Cleaning & Analysis
+Note: This code was partially taken from the analysis performed in project 1.
+
+```{r message=FALSE, include=FALSE, warning=FALSE}
+#remove all rows with mistyped dates 
+library(dplyr)
+umdclean <- umd %>% 
+  filter(Date >= "1983-01-01") %>% 
+  filter(Date <= "2019-09-15")
+
+#separate out dates for plotting purposes 
+umdclean <- umdclean %>% 
+  dplyr::mutate(year = lubridate::year(Date), month = lubridate::month(Date), day = lubridate::day(Date))
+
+transform(umdclean, year = as.numeric(year))
+
+umd20 <- umdclean %>%
+  filter(Date >= "1999-01-01")
+
+bls_avg <- read_excel("D:/bios611-projects-fall-2019-JessLMurray/project_2/data/BLS_unemployment_avg.xls")
+```
+
+```{r message=FALSE, warning=FALSE}
+#histogram of the frequency of clients/families aided per year
+umdyear <- umd20$year
+histo <- hist(umdyear, main="Frequency of Clients/Families Aided by UMD
+              per Year", ylab="Year", col="light blue")
+```
+
+```{r message=FALSE,include=FALSE, warning=FALSE}
+counts <- histo$counts
+counts
+```
+
+```{r message=FALSE, warning=FALSE}
+#correlation between the unemployment rate and the number of clients/families aided per year 
+blscorr <- data.frame("Clients/Families Aided Per Year" = counts, 
+                      "Unemployment Rate (Percent)" = bls_avg$`avg_unemployment`)
+blscorr
+ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
+  labs(x="Average Unemployment Rate (Percent)", y="Clients/Families Aided Per Year", 
+       title = "National Unemployment vs. Number of Clients/Families Aided per Year")
+```
+
+There appears to be a positive correlation between the national unemployment rate and the number of clients/families helped per year by UMD. Correlation analysis reveals that this association is statistically significant:  
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+model = lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
+summary(model)
+```
+Now that we have demonstrated a significant positive correlation between the national unemployment rate and the services provided by UMD (R^2^ = 0.6789, p-value = 8.0*10^-6^), we have the basis for a predictive tool that can estimate the number of clients/families that will visit UMD based on the economic climate. 
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(shiny)
+
+#define UI
+ui <- fluidPage(
+  
+  #App title
+  titlePanel("Predicting the Number of Clients/Families Aided by UMD Per Year Based on National Unemployment Rate"),
+  
+  #sidebar layout with input and output definitions
+  sidebarLayout(
+    
+    #sidebar panel
+    sidebarPanel(
+      numericInput("Unemployment.Rate..Percent.", "Unemployment Rate (Percent)", value = 5, min = 0, max = NA, step = NA, width = NULL)
+    ),
+    
+    #main panel for displaying outputs
+    mainPanel(
+      
+      #output: scatter plot
+      tabsetPanel(type = "tabs",
+
+tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
+tabPanel("Model Summary Stats", verbatimTextOutput("summary")), # Regression output
+tabPanel("Model Prediction", ) # dependent variable (clients aided/yr) output
+         ),
+    
+    )
+  )
+)
+
+#define server logic for making figure 
+server <- function(input, output) {
+
+  # Regression output
+  output$summary <- renderPrint({
+    fit <- lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
+    summary(fit)
+  })
+  
+  # dependent variable (clients aided/yr) output
+  output$tbl = DT::renderDataTable({
+    DT::datatable(swiss, options = list(lengthChange = FALSE))
+  })
+
+    # Scatterplot output
+  output$blscorr <- renderPlot({
+    ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
+     geom_point() + 
+     geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
+     labs(x="Average Unemployment Rate (Percent)", y="Clients/Families Aided Per Year", 
+       title = "Clients/Families Aided per Year vs. National Unemployment")
+  }, height=400)
+
+  
+  # Histogram output var 1
+  output$distribution1 <- renderPlot({
+    hist(swiss[,input$outcome], main="", xlab=input$outcome)
+  }, height=300, width=300)
+
+  # Histogram output var 2
+  output$distribution2 <- renderPlot({
+    hist(swiss[,input$indepvar], main="", xlab=input$indepvar)
+  }, height=300, width=300)
+}
+
+shinyApp(ui = ui, server = server)
+
+```
