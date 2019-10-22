@@ -5,8 +5,8 @@ account: jesslmurray
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1361410
-bundleId: 2526048
+bundleId: 2526293
 url: https://jesslmurray.shinyapps.io/project_2/
-when: 1571770052.77349
+when: 1571773199.81424
 asMultiple: FALSE
 asStatic: FALSE
