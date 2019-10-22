@@ -1,9 +1,7 @@
 #app.R
 library(tidyverse)
-library(readxl) 
+library(tidyr)
 library(dplyr)
-library(lubridate)
-library(readxl)  
 library(ggplot2)
 library(shiny)
 library(devtools)
@@ -12,27 +10,21 @@ rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530
 #load in the data
 #note - I cleaned up the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
 
-umd <- read_excel("UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
+umd20 <- read_csv("UMD_Services_Provided_20190719_cleaned 'type of bill paid'_cleaned date.csv")
 
-#remove all rows with mistyped dates 
-library(dplyr)
-umdclean <- umd %>% 
-  filter(Date >= "1983-01-01") %>% 
-  filter(Date <= "2019-09-15")
+#parsing date
+umdclean20 <- umd20 %>%
+  separate(Date, sep="/", into = c("month", "day", "year"))
 
-#separate out dates for plotting purposes 
-umdclean <- umdclean %>% 
-  mutate(year = lubridate::year(Date), month = lubridate::month(Date), day = lubridate::day(Date))
+transform(umdclean20, year = as.numeric(year))
 
-transform(umdclean, year = as.numeric(year))
 
-umd20 <- umdclean %>%
-  filter(Date >= "1999-01-01")
-
-bls_avg <- read_excel("BLS_unemployment_avg.xls")
+bls_avg <- read_csv("BLS_unemployment_avg.csv")
 
 #histogram of the frequency of clients/families aided per year
-umdyear <- umd20$year
+umdyear <- umdclean20$year
+umdyear <- as.numeric(umdyear)
+
 histo <- hist(umdyear, main="Frequency of Clients/Families Aided by UMD
               per Year", ylab="Year", col="light blue")
 counts <- histo$counts
