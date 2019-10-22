@@ -6,15 +6,13 @@ library(lubridate)
 library(readxl)  
 library(ggplot2)
 library(shiny)
-install.packages("rsconnect")
-rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530A2B8A', secret='rXMqDS/itm6+4GqDYROWYlwCEmBcVK6QIislFrOG')
-#set wd
-setwd("D:/bios611-projects-fall-2019-JessLMurray/project_2/data")
-getwd()
+library(devtools)
 
+rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530A2B8A', secret='rXMqDS/itm6+4GqDYROWYlwCEmBcVK6QIislFrOG')
 #load in the data
 #note - I cleaned up the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
-umd <- read_excel("D:/bios611-projects-fall-2019-JessLMurray/project_2/data/UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
+
+umd <- read_excel("UMD_Services_Provided_20190719_cleaned 'type of bill paid'.xls")
 
 #remove all rows with mistyped dates 
 library(dplyr)
@@ -24,14 +22,14 @@ umdclean <- umd %>%
 
 #separate out dates for plotting purposes 
 umdclean <- umdclean %>% 
-  dplyr::mutate(year = lubridate::year(Date), month = lubridate::month(Date), day = lubridate::day(Date))
+  mutate(year = lubridate::year(Date), month = lubridate::month(Date), day = lubridate::day(Date))
 
 transform(umdclean, year = as.numeric(year))
 
 umd20 <- umdclean %>%
   filter(Date >= "1999-01-01")
 
-bls_avg <- read_excel("D:/bios611-projects-fall-2019-JessLMurray/project_2/data/BLS_unemployment_avg.xls")
+bls_avg <- read_excel("BLS_unemployment_avg.xls")
 
 #histogram of the frequency of clients/families aided per year
 umdyear <- umd20$year
@@ -113,3 +111,6 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
+rsconnect::deployApp("D:/bios611-projects-fall-2019-JessLMurray/project_2")
+
+traceback()
