@@ -8,7 +8,7 @@ library(devtools)
 
 rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530A2B8A', secret='rXMqDS/itm6+4GqDYROWYlwCEmBcVK6QIislFrOG')
 #load in the data
-#note - I cleaned up the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
+#note - I cleaned up the dates and the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
 
 umd20 <- read_csv("UMD_Services_Provided_20190719_cleaned 'type of bill paid'_cleaned date.csv")
 
