@@ -1,7 +1,7 @@
 ---
 title: "Readme"
 author: "JessLMurray"
-date: "10/4/2019"
+date: "10/28/2019"
 output: html_document
 ---
 
@@ -25,11 +25,8 @@ This project is focused on analysis of goods and services provided by the non-pr
 
 ## UMD Shiny Dashboard 
 
-While project one focused on descriptive statistics for the data set, project two will focus more on identifying and harnessing trends to allow UMD to anticipate the needs of clients. Analysis will focus on answering the following questions: 
-* Are there longitudinal trends present in quantity of different goods of services provided over time?
-* Can the level of needed goods and services be predicted based on prior data?
-* Does the number of prior visits to UMD correlate to the type and/or amount of goods and services needed?
-
-The shiny dashboard will include predictive tools for determining the amount and/or type of goods and services needed based on the date and the number of prior UMD visits. 
+While project one focused on descriptive statistics for the data set, project two will focus more on identifying and harnessing trends to allow UMD to anticipate the needs of the community. This analysis will focus on whether economic data from the Bureau of Labor Statistics can be used to predict the number of clients who will visit UMD (data availabile at https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm).
 
 For more information on the services provided by UMD to the Durham county community, visit http://www.umdurham.org/. 
+
+Shiny Dashboard link: https://jesslmurray.shinyapps.io/project_2/
