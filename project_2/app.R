@@ -1,3 +1,4 @@
+
 #app.R
 library(tidyverse)
 library(tidyr)
@@ -5,49 +6,26 @@ library(dplyr)
 library(ggplot2)
 library(shiny)
 library(devtools)
+source("helper_functions.R")
 
-rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530A2B8A', secret='rXMqDS/itm6+4GqDYROWYlwCEmBcVK6QIislFrOG')
+#rsconnect::setAccountInfo(name='jesslmurray', token='5CCB97C7AAF85C4C2932DB47530A2B8A', secret='rXMqDS/itm6+4GqDYROWYlwCEmBcVK6QIislFrOG')
 #load in the data
 #note - I cleaned up the dates and the column for "Type of bill paid" by renaming redundancies in excel with the filter tool
-
-umd20 <- read_csv("UMD_Services_Provided_20190719_cleaned 'type of bill paid'_cleaned date.csv")
-
-#parsing date
-umdclean20 <- umd20 %>%
-  separate(Date, sep="/", into = c("month", "day", "year"))
-
-transform(umdclean20, year = as.numeric(year))
-
-
-bls_avg <- read_csv("BLS_unemployment_avg.csv")
-
-#histogram of the frequency of clients/families aided per year
-umdyear <- umdclean20$year
+#see helper functions script for description of functions
+load_umd()
+clean_umd()
+umd20 <- clean_umd()
+bls_avg<-load_bls()
+bls_avg
+umdyear <- umd20$year
 umdyear <- as.numeric(umdyear)
 
 histo <- hist(umdyear, main="Frequency of Clients/Families Aided by UMD
               per Year", ylab="Year", col="light blue")
 counts <- histo$counts
-counts
 
-#correlation between the unemployment rate and the number of clients/families aided per year 
 blscorr <- data.frame("Clients/Families Aided Per Year" = counts, 
                       "Unemployment Rate (Percent)" = bls_avg$`avg_unemployment`)
-ggplot(blscorr, aes(x=Unemployment.Rate..Percent., y=Clients.Families.Aided.Per.Year)) + 
-  geom_point() + 
-  geom_smooth(method = 'lm', se=TRUE, formula=y~x) + 
-  labs(x="Average Unemployment Rate (Percent)", y="Clients/Families Aided Per Year", 
-       title = "National Unemployment vs. Number of Clients/Families Aided per Year")
-
-model = lm(blscorr$Clients.Families.Aided.Per.Year ~ blscorr$Unemployment.Rate..Percent.)
-summary(model)
-
-#function for correlation
-employ <- function(employ) {
-  clientnum = ((employ)*662.9) - 641.2
-  return(clientnum)
-}
-
 #define UI
 ui <- fluidPage(
   
@@ -70,7 +48,7 @@ ui <- fluidPage(
                   tabPanel("Model Prediction", textOutput("clients")), # dependent variable (clients aided/yr) output
                   tabPanel("Scatterplot", plotOutput("blscorr")), # Plot
                   tabPanel("Model Summary Stats", verbatimTextOutput("summary")) # Regression output
-                 
+                  
       )
       
     )
@@ -81,9 +59,9 @@ ui <- fluidPage(
 server <- function(input, output) {
   
   # dependent variable (clients aided/yr) output
-  output$clients <- renderPrint({
-     paste('Predicted Clients/Families Aided per Year =', employ(input$Unemployment.Rate..Percent.))
-           })
+  output$clients <- renderText({
+    paste('Predicted Number of Clients/Families Aided per Year =', employ(input$Unemployment.Rate..Percent.))
+  })
   
   # Scatterplot output
   output$blscorr <- renderPlot({
@@ -103,6 +81,4 @@ server <- function(input, output) {
 }
 
 shinyApp(ui = ui, server = server)
-rsconnect::deployApp("D:/bios611-projects-fall-2019-JessLMurray/project_2")
-
-traceback()
+#rsconnect::deployApp("D:/bios611-projects-fall-2019-JessLMurray/project_2")
