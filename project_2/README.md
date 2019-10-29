@@ -25,7 +25,7 @@ This project is focused on analysis of goods and services provided by the non-pr
 
 ## UMD Shiny Dashboard 
 
-While project one focused on descriptive statistics for the data set, project two will focus more on identifying and harnessing trends to allow UMD to anticipate the needs of the community. This analysis will focus on whether economic data from the Bureau of Labor Statistics can be used to predict the number of clients who will visit UMD (data availabile at https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm).
+While project one focused on descriptive statistics for the data set, project two will focus more on identifying and harnessing trends to allow UMD to anticipate the needs of the community. This analysis will focus on whether economic data from the Bureau of Labor Statistics can be used to predict the number of clients who will visit UMD (data availabile at https://www.bls.gov/charts/employment-situation/civilian-unemployment-rate.htm). A correlation analysis was conducted between the national unemployment rate and the number of unique families/clients who were served by UMD from 1999-2019. These data serve as the basis for the predictive model used in the Shiny app.
 
 For more information on the services provided by UMD to the Durham county community, visit http://www.umdurham.org/. 
 
