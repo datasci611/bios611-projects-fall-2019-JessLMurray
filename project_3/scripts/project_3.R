@@ -15,7 +15,7 @@ disable_exit <- read_tsv("https://raw.githubusercontent.com/biodatascience/datas
 View(disable_exit)
 
 ee_reviews <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_REVIEWS_191102.tsv", na = "**")
-View(disable_reviews)
+View(ee_reviews)
 
 ee_udes <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv", na = "**")
 View(ee_udes)
