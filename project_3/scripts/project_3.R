@@ -1,4 +1,9 @@
 library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+install.packages("Hmisc")
+library(Hmisc)
 
 #setting the working directory
 getwd()
@@ -52,3 +57,48 @@ View(spdat_ind)
 
 spdat_v1 <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/VI_SPDAT_V1_191102.tsv", na = "**")
 View(spdat_v1)
+
+#getting descriptive stats on a few variables
+agehist = hist(client$'Client Age at Entry', 
+     main = "Histogram of Client Age at Entry", 
+     xlab = "Client Age", 
+     col = "light blue")
+summary(client$`Client Age at Entry`)
+#Looks like the median age of clients is 46 with a range of 18-81 yo
+
+#seeing if there are differences in age distribution by gender or race 
+transform(client, 'Client Age at Entry' = as.numeric(as.character('Client Age at Entry')))
+class(client$`Client Age at Entry`)
+
+agebygender = ggplot(client, aes(x=client$'Client Age at Entry', fill = client$`Client Gender`, color = client$`Client Gender`)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Age by Gender", x = "Client Age at Entry", y = "Count", legend = "Gender") 
+
+ggsave("Age_Distribution_by_Gender.png", height =3, width = 5)
+
+#using lubridate package to get the overall length of stay at UMD
+LOS_entrydate = entry_exit$`Entry Date`
+entrydate = mdy(entry_exit$`Entry Date`)
+View(entrydate)
+
+LOS_exitdate = entry_exit$`Exit Date`
+exitdate = mdy(entry_exit$`Exit Date`)
+View(exitdate)
+
+len = difftime(exitdate, entrydate, units = "weeks")
+len = round(len, digits = 0)
+View(len)
+length_of_stay = data.frame(len)
+
+#adding back the client ID variable
+clientid = entry_exit$`Client Unique ID`
+clientid = data.frame(clientid)
+
+ageatentry = client$'Client Age at Entry' 
+age = data.frame(ageatentry)
+
+LOS = data.frame(clientid, length_of_stay, age)
+View(LOS)
+
