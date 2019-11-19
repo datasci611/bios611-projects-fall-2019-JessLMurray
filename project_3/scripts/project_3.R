@@ -126,7 +126,7 @@ LOSbygender
 ggsave("LOS_Distribution_by_Gender.png", height =3, width = 5)
 
 #distribution of race
-racetable = table(client$`Client Primary Race`)
+racetable = table(na.omit(client$`Client Primary Race`))
 prop.table(racetable)
 #72.9% of clients are black or AA, and 24.8% of clients are white. 1.7% of clients are American Indian or Alaskan native. 
 
@@ -146,3 +146,20 @@ racebar
 
 ggsave("Racial_distribution.png", height=3, width=5)
 
+
+#i want to see if there is a racial difference in length of stay. since the vast majority of clients are black or white, i will remove clients who are not black or white so i can more easily visualize racial differences 
+LOS = na.omit(data.frame(clientid, length_of_stay, age, client$`Client Gender`, client$`Client Primary Race`))
+View(LOS)             
+
+LOSbw = LOS %>% filter(LOS$client..Client.Primary.Race. %in% c("White (HUD)", "Black or African American (HUD)"))
+View(LOSbw)
+
+LOSbyrace = ggplot(LOSbw, aes(x=LOSbw$'len', fill = LOSbw$client..Client.Primary.Race. , color = LOSbw$client..Client.Primary.Race.)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Length of Stay by Race (Black or White)", x = "Length of Stay (Weeks)", y = "Count", legend = "Race") +
+  xlim(0,50)
+LOSbyrace
+
+ggsave("Length_of_Stay_by_Race.png", height = 3, width = 5)
