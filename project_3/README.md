@@ -23,7 +23,6 @@ The objective of this project is to analyze the goods and services provided by t
 
 This project will focus on the influence of social determinants of health on the extent of services needed. My research questions are: 
 * What are the clients' demographics (e.g. race, age, gender, etc.)? 
-* What is the distribution of prior living situations among clients of UMD?
-* Is there a relationship between cash and non-cash income and the length of stay at UMD? If so, which forms of income are associated with the shortest length of stay?
+* Is there a relationship between client demographics and the length of stay at UMD? 
 
 For more information on the services provided by UMD to the Durham county community, visit http://www.umdurham.org/. 
