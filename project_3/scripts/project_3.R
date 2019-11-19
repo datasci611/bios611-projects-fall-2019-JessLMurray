@@ -193,4 +193,4 @@ LOSbyrace
 
 ggsave("Length_of_Stay_by_Race.png", height = 3, width = 5)
 
-
+#to the reviewer/feedback giver - by ultimate goal after getting a sense of the distribution of demographic variables is to develop a multivariable regression model that predicts length of stay in weeks based on gender, race, hx with prison system, assault survivorship, etc. I want to make this into a shiny app that has all of my figures on one tab, the model with inputs for demographics on another tab, and a final tab that shows summary statistics for the model. I'll use docker to load in my R environment and python to code my regression model, with a final make file that makes all of my figures. 
