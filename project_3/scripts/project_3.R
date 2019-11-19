@@ -2,8 +2,6 @@ library(tidyverse)
 library(ggplot2)
 library(dplyr)
 library(lubridate)
-install.packages("Hmisc")
-library(Hmisc)
 
 #setting the working directory
 getwd()
@@ -93,6 +91,36 @@ len = round(len, digits = 0)
 View(len)
 length_of_stay = data.frame(len)
 
+#distribution of length of stay
+len_decimal = difftime(exitdate,entrydate, units = "weeks")
+len_decimal = round(len_decimal, digits = 1)
+View(len_decimal)
+len_decimal = data.frame(len_decimal)
+len_decimal = as.numeric(unlist(len_decimal))
+hist(len_decimal)
+LOShist = ggplot(client, aes(x=len_decimal)) + 
+  geom_histogram(color = "black", fill = "light blue")+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Length of Stay (Weeks)", x = "Length of Stay", y = "Count") + 
+  xlim(0,50)  
+LOShist
+
+ggsave("LOS_Distribution.png", height =3, width = 5)
+
+LOShistzoom = ggplot(client, aes(x=len_decimal)) + 
+  geom_histogram(bins = 25, color = "black", fill = "light blue")+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Length of Stay (Weeks)", x = "Length of Stay (Weeks)", y = "Count") + 
+  xlim(0,5) 
+LOShistzoom
+
+ggsave("LOS_Distribution_0-5wks.png", height =3, width = 5)
+
+summary(len_decimal)
+#average LOS is 5.7 weeks, with range of 0-128 weeks. median LOS = 2.3 weeks (best to use median since there is right skew to LOS distribution)
+
 #adding back the client ID variable
 clientid = entry_exit$`Client Unique ID`
 clientid = data.frame(clientid)
@@ -163,3 +191,5 @@ LOSbyrace = ggplot(LOSbw, aes(x=LOSbw$'len', fill = LOSbw$client..Client.Primary
 LOSbyrace
 
 ggsave("Length_of_Stay_by_Race.png", height = 3, width = 5)
+
+
