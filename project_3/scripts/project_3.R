@@ -70,6 +70,7 @@ summary(client$`Client Age at Entry`)
 transform(client, 'Client Age at Entry' = as.numeric(as.character('Client Age at Entry')))
 class(client$`Client Age at Entry`)
 
+#plotting distribution of age by gender
 agebygender = ggplot(client, aes(x=client$'Client Age at Entry', fill = client$`Client Gender`, color = client$`Client Gender`)) + 
   geom_histogram(alpha = 0.5, position = 'dodge')+
   theme(legend.position = 'bottom')+
@@ -101,4 +102,47 @@ age = data.frame(ageatentry)
 
 LOS = data.frame(clientid, length_of_stay, age)
 View(LOS)
+
+#plotting length of stay by age
+losage = ggplot(LOS, aes(x=ageatentry, y=len)) + 
+  geom_hex() + 
+  labs(title = "Distribution of Length of Stay by Age", x = "Client Age at Entry (y)", y = "Length of Stay (Weeks)")
+losage
+
+ggsave("Distribution_LOS_by_Age.png", height=3, width=5)
+
+#plotting length of stay by gender 
+LOS = na.omit(data.frame(clientid, length_of_stay, age, client$`Client Gender`))
+View(LOS)
+
+LOSbygender = ggplot(LOS, aes(x=LOS$'len', fill = LOS$client..Client.Gender. , color = LOS$client..Client.Gender.)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Length of Stay by Gender", x = "Length of Stay (Weeks)", y = "Count", legend = "Gender") +
+  xlim(0,50)
+LOSbygender
+
+ggsave("LOS_Distribution_by_Gender.png", height =3, width = 5)
+
+#distribution of race
+racetable = table(client$`Client Primary Race`)
+prop.table(racetable)
+#72.9% of clients are black or AA, and 24.8% of clients are white. 1.7% of clients are American Indian or Alaskan native. 
+
+# re-order levels
+reorder_size <- function(x) {
+  factor(x, levels = names(sort(table(x), decreasing = TRUE)))
+}
+
+racebar = ggplot(na.omit(client), aes(x = reorder_size(`Client Primary Race`))) +
+  geom_bar(fill = "salmon") +
+  xlab("Client Primary Race") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1)) +  
+  labs(title = "Distribution of Client Race") + 
+  theme(axis.text = element_text(size=4))
+  
+racebar
+
+ggsave("Racial_distribution.png", height=3, width=5)
 
