@@ -132,12 +132,13 @@ LOS = data.frame(clientid, length_of_stay, age)
 View(LOS)
 
 #plotting length of stay by age
-losage = ggplot(LOS, aes(x=ageatentry, y=len)) + 
+losage = ggplot(LOS, aes(x=ageatentry, y=as.numeric(unlist(len)))) + 
   geom_hex() + 
   labs(title = "Distribution of Length of Stay by Age", x = "Client Age at Entry (y)", y = "Length of Stay (Weeks)")
 losage
 
 ggsave("Distribution_LOS_by_Age.png", height=3, width=5)
+#no real relationship between age and LOS as far as i can tell
 
 #plotting length of stay by gender 
 LOS = na.omit(data.frame(clientid, length_of_stay, age, client$`Client Gender`))
