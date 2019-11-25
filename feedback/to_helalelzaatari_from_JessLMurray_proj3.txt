@@ -1,3 +1,18 @@
 to_helalelzaatari_from_JessLMurray_proj3.txt
+
+Impressions: 
 	Your readme provides a solid overview of what you plan to do with the data, and sounds like it is focused on helping our client, UMD. I believe your second sentence is a fragment - "For example, whether people with a certain disability tend to stay longer than those with no disability or some other disability" should instead say something like "For example, I plan to investigate whether people with a certain disability tend to stay longer than those with no disability or some other disability."
 	You have also included some code for wrangling your data both in Python and R - this meets the criteria for the project, and it looks like you've done some necessary cleaning with regards to the dates of service for UMD. Well done! I also like your ideas for plotting the distribution of demographic variables such as length of stay, age, and gender - these should be really useful for UMD! Overall, I think your project shows promise and I'm curious to see the final result.
+	
+Feedback Outline: 
+1. project files are organized appropriately in directory but final readme does not include headers or sections; no Makefile yet
+2. project uses both Python and R 
+3. Docker is not used
+4. histograms in R script will be appropriate for client
+5. final files will need sections with headers and figures 
+6. purpose is communicated in readme
+7. purpose makes sense for client and should provide useful information on influence of demographic variables
+8. data source is not fully explained; consider including background statement on UMD and the source of the files
+9. interpretation is not yet added 
+10. see number 9
+11. take home statements/conclusions are not yet added. 
