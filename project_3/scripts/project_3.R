@@ -56,6 +56,10 @@ View(spdat_ind)
 spdat_v1 <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/VI_SPDAT_V1_191102.tsv", na = "**")
 View(spdat_v1)
 
+#loading in our data that was wrangled from python
+entry_exit_LOS <- read_csv("https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv", na = '**')
+View(entry_exit_LOS)
+
 #getting descriptive stats on a few variables
 agehist = hist(client$'Client Age at Entry', 
      main = "Histogram of Client Age at Entry", 
@@ -77,62 +81,34 @@ agebygender = ggplot(client, aes(x=client$'Client Age at Entry', fill = client$`
 
 ggsave("Age_Distribution_by_Gender.png", height =3, width = 5)
 
-#using lubridate package to get the overall length of stay at UMD
-LOS_entrydate = entry_exit$`Entry Date`
-entrydate = mdy(entry_exit$`Entry Date`)
-View(entrydate)
-
-LOS_exitdate = entry_exit$`Exit Date`
-exitdate = mdy(entry_exit$`Exit Date`)
-View(exitdate)
-
-len = difftime(exitdate, entrydate, units = "weeks")
-len = round(len, digits = 0)
-View(len)
-length_of_stay = data.frame(len)
-
-#distribution of length of stay
-len_decimal = difftime(exitdate,entrydate, units = "weeks")
-len_decimal = round(len_decimal, digits = 1)
-View(len_decimal)
-len_decimal = data.frame(len_decimal)
-len_decimal = as.numeric(unlist(len_decimal))
-hist(len_decimal)
-LOShist = ggplot(client, aes(x=len_decimal)) + 
+#distribution of the length of stay at UMD 
+LOShist = ggplot(entry_exit_LOS, aes(x=LOS_days)) + 
   geom_histogram(color = "black", fill = "light blue")+
   theme(legend.position = 'bottom')+
   theme(legend.title = element_blank())+
-  labs(title = "Distribution of Length of Stay (Weeks)", x = "Length of Stay", y = "Count") + 
-  xlim(0,50)  
+  labs(title = "Distribution of Length of Stay (Days)", x = "Length of Stay (Days)", y = "Count") + 
+  xlim(0,150)  
 LOShist
 
 ggsave("LOS_Distribution.png", height =3, width = 5)
 
-LOShistzoom = ggplot(client, aes(x=len_decimal)) + 
+LOShistzoom = ggplot(entry_exit_LOS, aes(x=LOS_days)) + 
   geom_histogram(bins = 25, color = "black", fill = "light blue")+
   theme(legend.position = 'bottom')+
   theme(legend.title = element_blank())+
-  labs(title = "Distribution of Length of Stay (Weeks)", x = "Length of Stay (Weeks)", y = "Count") + 
-  xlim(0,5) 
+  labs(title = "Distribution of Length of Stay (Days)", x = "Length of Stay (Days)", y = "Count") + 
+  xlim(0,30) 
 LOShistzoom
 
-ggsave("LOS_Distribution_0-5wks.png", height =3, width = 5)
+ggsave("LOS_Distribution_0-30days.png", height =3, width = 5)
 
-summary(len_decimal)
-#average LOS is 5.7 weeks, with range of 0-128 weeks. median LOS = 2.3 weeks (best to use median since there is right skew to LOS distribution)
-
-#adding back the client ID variable
-clientid = entry_exit$`Client Unique ID`
-clientid = data.frame(clientid)
-
-ageatentry = client$'Client Age at Entry' 
-age = data.frame(ageatentry)
-
-LOS = data.frame(clientid, length_of_stay, age)
-View(LOS)
+summary(entry_exit_LOS$'LOS_days')
+#average LOS is 40 days with range of 0-894 days. median LOS = 16 days (best to use median since there is right skew to LOS distribution)
 
 #plotting length of stay by age
-losage = ggplot(LOS, aes(x=ageatentry, y=as.numeric(unlist(len)))) + 
+losage = data.frame(LOS = entry_exit_LOS$LOS_days, age = client$`Client Age at Entry`)
+View(losage)
+losage = ggplot(entry_exit_LOS, aes(x=, y=LOS_days) + 
   geom_hex() + 
   labs(title = "Distribution of Length of Stay by Age", x = "Client Age at Entry (y)", y = "Length of Stay (Weeks)")
 losage
