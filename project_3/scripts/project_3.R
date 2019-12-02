@@ -58,28 +58,9 @@ View(spdat_v1)
 
 #loading in our data that was wrangled from python
 entry_exit_LOS <- read_csv("https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv", na = '**')
-View(entry_exit_LOS)
 
-#getting descriptive stats on a few variables
-agehist = hist(client$'Client Age at Entry', 
-     main = "Histogram of Client Age at Entry", 
-     xlab = "Client Age", 
-     col = "light blue")
-summary(client$`Client Age at Entry`)
-#Looks like the median age of clients is 46 with a range of 18-81 yo
-
-#seeing if there are differences in age distribution by gender or race 
-transform(client, 'Client Age at Entry' = as.numeric(as.character('Client Age at Entry')))
-class(client$`Client Age at Entry`)
-
-#plotting distribution of age by gender
-agebygender = ggplot(client, aes(x=client$'Client Age at Entry', fill = client$`Client Gender`, color = client$`Client Gender`)) + 
-  geom_histogram(alpha = 0.5, position = 'dodge')+
-  theme(legend.position = 'bottom')+
-  theme(legend.title = element_blank())+
-  labs(title = "Distribution of Age by Gender", x = "Client Age at Entry", y = "Count", legend = "Gender") 
-
-ggsave("Age_Distribution_by_Gender.png", height =3, width = 5)
+client_LOS <- read_csv("https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv", na = "**")
+View(client_LOS)
 
 #distribution of the length of stay at UMD 
 LOShist = ggplot(entry_exit_LOS, aes(x=LOS_days)) + 
@@ -90,7 +71,7 @@ LOShist = ggplot(entry_exit_LOS, aes(x=LOS_days)) +
   xlim(0,150)  
 LOShist
 
-ggsave("LOS_Distribution.png", height =3, width = 5)
+#ggsave("LOS_Distribution.png", height =3, width = 5)
 
 LOShistzoom = ggplot(entry_exit_LOS, aes(x=LOS_days)) + 
   geom_histogram(bins = 25, color = "black", fill = "light blue")+
@@ -100,21 +81,34 @@ LOShistzoom = ggplot(entry_exit_LOS, aes(x=LOS_days)) +
   xlim(0,30) 
 LOShistzoom
 
-ggsave("LOS_Distribution_0-30days.png", height =3, width = 5)
+#ggsave("LOS_Distribution_0-30days.png", height =3, width = 5)
 
 summary(entry_exit_LOS$'LOS_days')
-#average LOS is 40 days with range of 0-894 days. median LOS = 16 days (best to use median since there is right skew to LOS distribution)
+#The average LOS is 40 days with range of 0-894 days. Median LOS = 16 days (best to use median since there is right skew to the LOS distribution). 
 
 #plotting length of stay by age
-losage = data.frame(LOS = entry_exit_LOS$LOS_days, age = client$`Client Age at Entry`)
-View(losage)
-losage = ggplot(entry_exit_LOS, aes(x=, y=LOS_days) + 
+losage = ggplot(client_LOS, aes(x=`Client Age at Entry`, y=LOS_days)) + 
   geom_hex() + 
-  labs(title = "Distribution of Length of Stay by Age", x = "Client Age at Entry (y)", y = "Length of Stay (Weeks)")
+  labs(title = "Distribution of Length of Stay by Age", x = "Client Age at Entry (y)", y = "Length of Stay (Days)")
 losage
 
-ggsave("Distribution_LOS_by_Age.png", height=3, width=5)
-#no real relationship between age and LOS as far as i can tell
+#ggsave("Distribution_LOS_by_Age.png", height=3, width=5)
+#There does not appear to be any relationship between the length of stay and the age of UMD clients. 
+
+#seeing if there are differences in age distribution by gender
+transform(client, 'Client Age at Entry' = as.numeric(as.character('Client Age at Entry')))
+class(client$`Client Age at Entry`)
+
+#plotting distribution of age by gender
+agebygender = ggplot(client, aes(x=client$'Client Age at Entry', fill = client$`Client Gender`, color = client$`Client Gender`)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Distribution of Age by Gender", x = "Client Age at Entry", y = "Count", legend = "Gender") 
+agebygender
+#More men than women appear to use UMD's services overall; however, there appears to be no difference in the age distribution between the genders (i.e., the average age of women at UMD does not appear to be very different from the average age of men at UMD). There appears to be a bimodal distribution in the ages of those who use UMD's services for both genders, with one peak at around age 25 and another peak at around age 50.
+
+#ggsave("Age_Distribution_by_Gender.png", height =3, width = 5)
 
 #plotting length of stay by gender 
 LOS = na.omit(data.frame(clientid, length_of_stay, age, client$`Client Gender`))
@@ -128,45 +122,157 @@ LOSbygender = ggplot(LOS, aes(x=LOS$'len', fill = LOS$client..Client.Gender. , c
   xlim(0,50)
 LOSbygender
 
-ggsave("LOS_Distribution_by_Gender.png", height =3, width = 5)
+#ggsave("LOS_Distribution_by_Gender.png", height =3, width = 5)
+
+summary(client$`Client Age at Entry`)
+gendertable = table(na.omit(client$`Client Gender`))
+prop.table(gendertable)
+
+#The average age of UMD clients is 44 years old, with a range of 18 - 81. Approximately 75% of clients are male, and approximately 24% of clients are female (17 clients in the data set are transgender, and information is not provided for some clients). Based on the distribution, the average length of stay does not appear to be affected by gender. 
 
 #distribution of race
 racetable = table(na.omit(client$`Client Primary Race`))
 prop.table(racetable)
 #72.9% of clients are black or AA, and 24.8% of clients are white. 1.7% of clients are American Indian or Alaskan native. 
 
-# re-order levels
-reorder_size <- function(x) {
-  factor(x, levels = names(sort(table(x), decreasing = TRUE)))
-}
-
-racebar = ggplot(na.omit(client), aes(x = reorder_size(`Client Primary Race`))) +
-  geom_bar(fill = "salmon") +
-  xlab("Client Primary Race") +
-  theme(axis.text.x = element_text(angle = 65, hjust = 1)) +  
-  labs(title = "Distribution of Client Race") + 
-  theme(axis.text = element_text(size=4))
-  
-racebar
-
-ggsave("Racial_distribution.png", height=3, width=5)
-
-
-#i want to see if there is a racial difference in length of stay. since the vast majority of clients are black or white, i will remove clients who are not black or white so i can more easily visualize racial differences 
-LOS = na.omit(data.frame(clientid, length_of_stay, age, client$`Client Gender`, client$`Client Primary Race`))
-View(LOS)             
-
-LOSbw = LOS %>% filter(LOS$client..Client.Primary.Race. %in% c("White (HUD)", "Black or African American (HUD)"))
+#I want to see if there is a racial difference in the average length of stay. Since the vast majority of clients are black or white, I will remove clients who are not black or white so I can more easily visualize racial differences (code below). This analysis will therefore be limited by the exclusion of other races. 
+LOSbw = client_LOS %>% filter(client_LOS$`Client Primary Race` %in% c("White (HUD)", "Black or African American (HUD)"))
 View(LOSbw)
 
-LOSbyrace = ggplot(LOSbw, aes(x=LOSbw$'len', fill = LOSbw$client..Client.Primary.Race. , color = LOSbw$client..Client.Primary.Race.)) + 
+LOSbyrace = ggplot(LOSbw, aes(x=LOSbw$'LOS_days', fill = LOSbw$`Client Primary Race` , color = LOSbw$`Client Primary Race`)) + 
   geom_histogram(alpha = 0.5, position = 'dodge')+
   theme(legend.position = 'bottom')+
   theme(legend.title = element_blank())+
-  labs(title = "Distribution of Length of Stay by Race (Black or White)", x = "Length of Stay (Weeks)", y = "Count", legend = "Race") +
+  labs(title = "Distribution of Length of Stay by Race (Black or White)", x = "Length of Stay (Days)", y = "Count", legend = "Race") +
   xlim(0,50)
 LOSbyrace
+#ggsave("Length_of_Stay_by_Race.png", height = 3, width = 5)
 
-ggsave("Length_of_Stay_by_Race.png", height = 3, width = 5)
+#I will now do a simple t-test to see if there is a significant difference in the average number of days spent at UMD by race. 
+t.test(LOSbw$LOS_days ~ LOSbw$`Client Primary Race`)
 
-#to the reviewer/feedback giver - by ultimate goal after getting a sense of the distribution of demographic variables is to develop a multivariable regression model that predicts length of stay in weeks based on gender, race, hx with prison system, assault survivorship, etc. I want to make this into a shiny app that has all of my figures on one tab, the model with inputs for demographics on another tab, and a final tab that shows summary statistics for the model. I'll use docker to load in my R environment and python to code my regression model, with a final make file that makes all of my figures. 
+#T-test results indicate that there is no significant difference in the average length of stay for black clients vs. white clients:
+#| Length of Stay (black clients) | Length of Stay (white clients) | p-value |
+#|:---------|:-----------|:-----------|
+#| 40.4 days | 37.2 days | 0.1012 |
+
+#Comparing LOS by veteran status
+vettable = table(na.omit(client$`Client Veteran Status`))
+prop.table(vettable)
+
+#Approximately 89% of the 5,299 clients in the 'client_LOS' data set are not veterans and approximately 11% of clients are veterans. Is there a significant difference in the length of stay for veterans vs. non-veterans?
+
+vet_LOS = client_LOS %>% filter(client_LOS$`Client Veteran Status` %in% c("No (HUD)", "Yes (HUD)"))
+t.test(vet_LOS$LOS_days~vet_LOS$`Client Veteran Status`)
+
+#There is no significant difference in the average length of stay based on veteran status: 
+#| Length of Stay (veterans) | Length of Stay (non-veterans) | p-value |
+#|:---------|:-----------|:-----------|
+#| 37.8 days | 39.8 days | 0.4619 |
+
+#Comparing LOS by disability determination at entry to UMD
+disabletable = table(na.omit(disable_entry$`Disability Determination (Entry)`))
+prop.table(disabletable)
+
+#About 88% of clients are not disabled, and about 12% of clients have some form of disability. Does disability status impact the length of stay at UMD?
+
+disable_LOS = merge(client_LOS, disable_entry, by = 'Client Unique ID') %>% filter(disable_LOS$`Disability Determination (Entry)` %in% c('Yes (HUD)', 'No (HUD)'))
+t.test(disable_LOS$LOS_days ~ disable_LOS$`Disability Determination (Entry)`)
+
+#There is a very small yet significant difference in length of stay based on disability status which suggests that abled persons spend longer at UMD on average: 
+#| Length of Stay (disabled persons) | Length of Stay (abled persons) | p-value |
+#|:---------|:-----------|:-----------|
+#| 31.1 days | 31.8 days | 0.0222 |
+
+#Though this finding is technically statistically significant, it is likely not relevant or useful to those at UMD since the overall difference is less than 1 day. 
+
+#Comparing LOS by health insurance coverage at entry to UMD
+healthins_entry_table = table(na.omit(healthins_entry$`Covered (Entry)`))
+prop.table(healthins_entry_table)
+
+#94.3% of clients do not have health insurance, and approximately 5.6% of clients have coverage. 
+
+ins_LOS = merge(client_LOS, healthins_entry, by = 'Client Unique ID') %>% filter(ins_LOS$`Covered (Entry)` %in% c('Yes', 'No'))
+t.test(ins_LOS$LOS_days ~ ins_LOS$`Covered (Entry)`)
+
+#Clients without health insurance stay about three days longer at UMD on average compared to clients with health insurance: 
+#| Length of Stay (health insurance) | Length of Stay (no health insurance) | p-value |
+#|:---------|:-----------|:-----------|
+#| 29.6 days | 32.3 days | 6.05e-11 |
+
+#Clients without health insurance may have a greater number of medical expenses compared to those with insurance, which may contribute to a longer stay at UMD. Insurance coverage may also serve as a general indicator of overall wealth, which would suggest that clients with more wealth spend less time at UMD. 
+LOSbyins = ggplot(ins_LOS, aes(x=ins_LOS$'LOS_days', fill = ins_LOS$`Covered (Entry)` , color = ins_LOS$`Covered (Entry)`)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Length of Stay by Health Insurance Coverage (Y/N)", x = "Length of Stay at UMD (Days)", y = "Count", legend = "Insurance Coverage at Entry") +
+  xlim(0, 100)
+LOSbyins
+
+#ggsave("Length_of_Stay_by_Insurance.png", height = 3, width = 5)
+
+#Comparing LOS by domestic violence survivorship
+violencetable = table(na.omit(ee_udes$`Domestic violence victim/survivor(341)`))
+prop.table(violencetable)
+
+#Approximately 9.4% of UMD clients are domestic violence victims/survivors. 
+violence_LOS = merge(client_LOS, ee_udes, by = 'Client Unique ID') %>% filter(violence_LOS$`Domestic violence victim/survivor(341)` %in% c('Yes (HUD)', 'No (HUD)'))
+t.test(violence_LOS$LOS_days ~ violence_LOS$`Domestic violence victim/survivor(341)`)
+
+LOSbyvio = ggplot(violence_LOS, aes(x=violence_LOS$'LOS_days', fill = violence_LOS$`Domestic violence victim/survivor(341)` , color = violence_LOS$`Domestic violence victim/survivor(341)`)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Length of Stay by Domestic Violence Survivorship", x = "Length of Stay at UMD (Days)", y = "Count", legend = "Domestic Violence Victimhood/Survivorship") +
+  xlim(0, 100)
+LOSbyvio
+
+#ggsave("Length_of_Stay_by_Violence.png", height = 3, width = 5)
+
+#Clients who have experienced domestic violence stay approximately 8 days longer at UMD compared to those who are not victims of domestic violence: 
+#| Length of Stay (domestic violence victims/survivors) | Length of Stay (no history of domestic violence) | p-value |
+#|:---------|:-----------|:-----------|
+#| 38.2 days | 30.5 days | 9.59e-9 |
+
+#I believe this large difference in length of stay is indicative of the fact that domestic violence is often correlated with homelessness. This information may be useful to UMD staff: based on this trend, clients who are victims/survivors of domestic violence could be flagged to receive additional follow-up and/or assistance from UMD. 
+
+#Comparing LOS by income status at entry to UMD
+incometable = table(na.omit(income_entry$`Receiving Income (Entry)`))
+prop.table(incometable)
+
+#About 96.6% of UMD clients are not receiving any form of income at entry. 
+
+income_LOS = merge(client_LOS, income_entry, by = 'Client Unique ID') %>% filter(income_LOS$`Receiving Income (Entry)` %in% c('Yes', 'No'))
+t.test(income_LOS$LOS_days ~ income_LOS$`Receiving Income (Entry)`)
+
+#Clients with some form of income stay about four more days at UMD on average compared to clients with no income: 
+#| Length of Stay (receiving income) | Length of Stay (no income source) | p-value |
+#|:---------|:-----------|:-----------|
+#| 35.4 days | 31.7 days | 2.537e-16 |
+
+LOSbyincome = ggplot(income_LOS, aes(x=income_LOS$'LOS_days', fill = income_LOS$`Receiving Income (Entry)` , color = violence_LOS$`Receiving Income (Entry)`)) + 
+  geom_histogram(alpha = 0.5, position = 'dodge')+
+  theme(legend.position = 'bottom')+
+  theme(legend.title = element_blank())+
+  labs(title = "Length of Stay by Income Status", x = "Length of Stay at UMD (Days)", y = "Count", legend = "Receiving Income (Y/N)") +
+  xlim(0, 100) 
+LOSbyincome
+
+#ggsave("Length_of_Stay_by_Income.png", height = 3, width = 5)
+
+#This is an interesting and unexpected finding.Further analysis could be performed to explore the source and amount of income for clients, and whether different forms of income have different relationships to the length of stay. It is possible that the income source is too small to allow clients to live independently, or the fact that the client(s) have an income source disqualifies them from receiving benefits given to those with no income. It is also possible that a lack of income may serve as a barrier to receiving services from UMD (for example, a client who cannot afford to pay a bus fare to return to UMD from across town may be counted as leaving UMD's service). More information from clients and staff at UMD may provide some insight into this finding. 
+
+#Summary Table & Conclusion
+
+#| Demographic Variable Tested | Relationship to Length of Stay (LOS)? | Finding |
+#|:---------|:-----------|:-----------|
+#| Age | No | Age did not appear to be associated with LOS based on visual inspection of distribution |
+#| Gender | No | Gender was not associated with LOS based on visual inspection of distribution |
+#| Race | No | No significant difference in LOS by race (black or white) |
+#| Veteran Status | No | No significant difference in LOS by veteran status |
+#| Disability Determination | Yes* | *Very small yet significant difference in LOS in favor of disabled clients; likely not a 'real' difference |
+#| Health Insurance Coverage | Yes | Significantly longer LOS for clients without health insurance (32.3 days vs. 29.6 days, p = 6.05e-11 ) |
+#| Domestic Violence Victimhood/Survivorship | Yes | Significantly longer LOS for clients who are victims/survivors of domestic violence (38.2 days vs. 30.5 days, p = 9.59e-9) |
+#| Receiving Income | Yes | Significantly longer LOS for patients with a source of income (35.4 days vs. 31.7 days, p = 2.54e-16) |
+
+#Demographic variables that appeared to influence the length of stay at UMD include: health insurance coverage, domestic violence victimhood/survivorship, and presence of an income source. These demographic data may be used by UMD staff to inform decisions regarding resource allocation for specific clients. This analysis was limited by the lack of knowledge surrounding the data, i.e. how the data was collected, and how the variable responses should be interpreted. With additional time, I would like to investigate the nature of the relationship between length of stay and income source, as well as the possible relationship between SPDAT survey responses and length of stay. 
