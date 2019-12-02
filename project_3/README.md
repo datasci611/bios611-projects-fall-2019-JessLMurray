@@ -27,3 +27,5 @@ This project will focus on the influence of social determinants of health on the
 * Specific demographic variables I am interested in include: age, gender, race, veteran status, disability determination, health insurance coverage, domestic violence victimhood/survivorship, and income source(s).
 
 For more information on the services provided by UMD to the Durham county community, visit http://www.umdurham.org/. 
+
+**To run the project: make results/Project-3-Report.pdf**
