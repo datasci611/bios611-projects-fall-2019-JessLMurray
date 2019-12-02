@@ -1,0 +1,5 @@
+results/Project-3-Report.pdf: results/Project_3_Report.Rmd 
+	docker run -it --rm \
+	-v $(shell pwd):/workdir \
+	-w /workdir rocker/tidyverse \
+	Rscript -e "library(rmarkdown); rmarkdown::render('results/Project_3_Report.Rmd', 'pdf_document')"
