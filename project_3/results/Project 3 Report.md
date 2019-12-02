@@ -6,10 +6,28 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+
+#loading in the data from github and taking a look 
+client <- read_tsv(url("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/CLIENT_191102.tsv"), na = "**")
+
+disable_entry <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/DISABILITY_ENTRY_191102.tsv", na = "**")
+
+ee_udes <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv", na = "**")
+
+healthins_entry <- read_tsv("https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/HEALTH_INS_ENTRY_191102.tsv", na = "**")
+
+#loading in our data that was wrangled from python
+entry_exit_LOS <- read_csv("https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv", na = '**')
+
+client_LOS <- read_csv("https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv", na = "**")
+View(client_LOS)
 ```
 
-## R Markdown
+## Urban Ministries of Durham Data Analysis
 
 This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
