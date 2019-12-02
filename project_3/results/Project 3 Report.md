@@ -156,6 +156,7 @@ t.test(LOSbw$LOS_days ~ LOSbw$`Client Primary Race`)
 ```
 
 T-test results indicate that there is no significant difference in the average length of stay for black clients vs. white clients:
+
 | Length of Stay (black clients) | Length of Stay (white clients) | p-value |
 |:---------|:-----------|:-----------|
 | 40.4 days | 37.2 days | 0.1012 |
@@ -174,6 +175,7 @@ vet_LOS = filter(client_LOS$`Client Veteran Status` %in% c("No (HUD)", "Yes (HUD
 t.test(vet_LOS$LOS_days~vet_LOS$`Client Veteran Status`)
 ```
 There is no significant difference in the average length of stay based on veteran status: 
+
 | Length of Stay (veterans) | Length of Stay (non-veterans) | p-value |
 |:---------|:-----------|:-----------|
 | 37.8 days | 39.8 days | 0.4619 |
@@ -193,6 +195,7 @@ t.test(disable_LOS$LOS_days ~ disable_LOS$`Disability Determination (Entry)`)
 ```
 
 There is a very small yet significant difference in length of stay based on disability status which suggests that abled persons spend longer at UMD on average: 
+
 | Length of Stay (disabled persons) | Length of Stay (abled persons) | p-value |
 |:---------|:-----------|:-----------|
 | 31.1 days | 31.8 days | 0.0222 |
@@ -214,6 +217,7 @@ t.test(ins_LOS$LOS_days ~ ins_LOS$`Covered (Entry)`)
 ```
 
 Clients without health insurance stay about three days longer at UMD on average compared to clients with health insurance: 
+
 | Length of Stay (health insurance) | Length of Stay (no health insurance) | p-value |
 |:---------|:-----------|:-----------|
 | 29.6 days | 32.3 days | 6.05e-11 |
@@ -255,6 +259,7 @@ LOSbyvio = ggplot(vio_LOS, aes(x=vio_LOS$'LOS_days', fill = violence_LOS$`Domest
 LOSbyvio
 ```
 Clients who have experienced domestic violence stay approximately 8 days longer at UMD compared to those who are not victims of domestic violence: 
+
 | Length of Stay (domestic violence victims/survivors) | Length of Stay (no history of domestic violence) | p-value |
 |:---------|:-----------|:-----------|
 | 38.2 days | 30.5 days | 9.59e-9 |
@@ -277,6 +282,7 @@ t.test(income_LOS$LOS_days ~ income_LOS$`Receiving Income (Entry)`)
 ```
 
 Clients with some form of income stay about four more days at UMD on average compared to clients with no income: 
+
 | Length of Stay (receiving income) | Length of Stay (no income source) | p-value |
 |:---------|:-----------|:-----------|
 | 35.4 days | 31.7 days | 2.537e-16 |
