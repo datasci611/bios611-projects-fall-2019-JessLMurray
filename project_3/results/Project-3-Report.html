@@ -369,9 +369,15 @@ summary {
 </div>
 
 
-<p><code>{r setup, include=FALSE} knitr::opts_chunk$set(echo = TRUE)</code></p>
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
+<p>```{r setup, include=FALSE} library(tidyverse) library(ggplot2) library(dplyr) library(lubridate)</p>
+<p>#loading in the data from github and taking a look client &lt;- read_tsv(url(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/CLIENT_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/CLIENT_191102.tsv</a>”), na = &quot;**&quot;)</p>
+<p>disable_entry &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/DISABILITY_ENTRY_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/DISABILITY_ENTRY_191102.tsv</a>”, na = &quot;**&quot;)</p>
+<p>ee_udes &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv</a>”, na = &quot;**&quot;)</p>
+<p>healthins_entry &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/HEALTH_INS_ENTRY_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/HEALTH_INS_ENTRY_191102.tsv</a>”, na = &quot;**&quot;)</p>
+<p>#loading in our data that was wrangled from python entry_exit_LOS &lt;- read_csv(“<a href="https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv" class="uri">https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv</a>”, na = ’**’)</p>
+<p>client_LOS &lt;- read_csv(“<a href="https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv" class="uri">https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv</a>”, na = &quot;**&quot;) View(client_LOS) ```</p>
+<div id="urban-ministries-of-durham-data-analysis" class="section level2">
+<h2>Urban Ministries of Durham Data Analysis</h2>
 <p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
 <p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
 <p><code>{r cars} summary(cars)</code></p>
