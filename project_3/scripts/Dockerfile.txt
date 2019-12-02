@@ -1,0 +1,6 @@
+FROM rocker/r-ver:3.6.1
+
+RUN mkdir jessleem/results
+
+RUN R -e "install.packages("tidyverse"); install.packages("ggplot2"); install.packages("dplyr"); library(tidyverse); library(ggplot2); library(dplyr)"
+
