@@ -369,18 +369,57 @@ summary {
 </div>
 
 
-<p>```{r setup, include=FALSE} library(tidyverse) library(ggplot2) library(dplyr) library(lubridate)</p>
+<p>```{r warning=FALSE, include=FALSE} library(tidyverse) library(ggplot2) library(dplyr) library(lubridate)</p>
 <p>#loading in the data from github and taking a look client &lt;- read_tsv(url(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/CLIENT_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/CLIENT_191102.tsv</a>”), na = &quot;**&quot;)</p>
 <p>disable_entry &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/DISABILITY_ENTRY_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/DISABILITY_ENTRY_191102.tsv</a>”, na = &quot;**&quot;)</p>
 <p>ee_udes &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/EE_UDES_191102.tsv</a>”, na = &quot;**&quot;)</p>
 <p>healthins_entry &lt;- read_tsv(“<a href="https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/HEALTH_INS_ENTRY_191102.tsv" class="uri">https://raw.githubusercontent.com/biodatascience/datasci611/gh-pages/data/project2_2019/HEALTH_INS_ENTRY_191102.tsv</a>”, na = &quot;**&quot;)</p>
 <p>#loading in our data that was wrangled from python entry_exit_LOS &lt;- read_csv(“<a href="https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv" class="uri">https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/entry_exit_LOS.csv</a>”, na = ’**’)</p>
 <p>client_LOS &lt;- read_csv(“<a href="https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv" class="uri">https://raw.githubusercontent.com/datasci611/bios611-projects-fall-2019-JessLMurray/master/project_3/data/client_LOS.csv</a>”, na = &quot;**&quot;) View(client_LOS) ```</p>
-<div id="urban-ministries-of-durham-data-analysis" class="section level2">
-<h2>Urban Ministries of Durham Data Analysis</h2>
+<div id="urban-ministries-of-durham-umd-data-analysis" class="section level2">
+<h2>Urban Ministries of Durham (UMD) Data Analysis</h2>
+<p>Data was wrangled in Python; statistical analysis and plotting was performed in R. The data sets used in this analysis include the following (provided by UMD):</p>
+<table>
+<colgroup>
+<col width="45%"></col>
+<col width="54%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Data Set</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Client</td>
+<td align="left">information on client age, gender, race, ethnicity, and veteran status</td>
+</tr>
+<tr class="even">
+<td align="left">Disable_Entry</td>
+<td align="left">information re. disability type &amp; status at time of entry to UMD services</td>
+</tr>
+<tr class="odd">
+<td align="left">EE_UDES, Entry_Exit</td>
+<td align="left">information re. entry and exit interviews conducted with clients, including housing status and history, domestic violence history, length of stay, and reason(s) for leaving UMD</td>
+</tr>
+<tr class="even">
+<td align="left">Health_Ins Entry</td>
+<td align="left">health insurance type and coverage status for clients at time of entry to UMD services</td>
+</tr>
+<tr class="odd">
+<td align="left">Income Entry</td>
+<td align="left">information re. cash and non-cash sources of income for UMD clients at time of entry to UMD services</td>
+</tr>
+</tbody>
+</table>
+<div id="research-questions" class="section level3">
+<h3>Research Questions</h3>
+<p>This project will focus on the influence of social determinants of health on the extent of services needed. My research questions are: * What is the general distribution of the clients’ age, gender, and race? * Is there a relationship between client demographics and the length of stay at UMD? * Specific demographic variables I am interested in include: age, gender, race, veteran status, disability determination, health insurance coverage, domestic violence victimhood/survivorship, and income source(s).</p>
 <p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
 <p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
 <p><code>{r cars} summary(cars)</code></p>
+</div>
 </div>
 <div id="including-plots" class="section level2">
 <h2>Including Plots</h2>
