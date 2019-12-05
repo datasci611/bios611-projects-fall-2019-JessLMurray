@@ -1,0 +1,5 @@
+score: 15/15
+
+Thank you for your feedbacks! I did add more elaborations to my final markdown product
+and made sure the plots' axis labels were updated. I hope that they are adequate
+for making my points clear. 
